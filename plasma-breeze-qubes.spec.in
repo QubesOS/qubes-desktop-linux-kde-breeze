@@ -1,17 +1,22 @@
 Name:    plasma-breeze-qubes
-Version: 5.5.8
-Release: 1%{?dist}
+Version: @VERSION@
+Release: @REL@%{?dist}
 Summary: Qubes colorful frames for Breeze plasma theme
 
 License: GPLv2+
 URL:     https://qubes-os.org
 
-Source0: qubes-generate-color-palette
-Source1: qubes-generate-color-palette.desktop
+Source0: %{name}-%{version}.tar.gz
+Source1: qubes-generate-color-palette
+Source2: qubes-generate-color-palette.desktop
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-Requires:       plasma-breeze
-Requires:       pyxdg
+Requires: plasma-breeze
+%if 0%{?fedora} >=32 || 0%{?rhel} >= 8
+Requires: python3-pyxdg
+%else
+Requires: pyxdg
+%endif
 
 Obsoletes: kde-style-plastik-for-qubes
 
@@ -19,19 +24,17 @@ Obsoletes: kde-style-plastik-for-qubes
 %{summary}.
 
 %prep
-# nothing to do
-
-%build
-# nothing to do
+%setup
 
 %install
 mkdir -p %{buildroot}/usr/bin
-install -m 0755 %{SOURCE0} %{buildroot}/usr/bin/
+install -m 0755 %{SOURCE1} %{buildroot}/usr/bin/
 mkdir -p %{buildroot}/etc/xdg/autostart
-install -m 0644 %{SOURCE1} %{buildroot}/etc/xdg/autostart/
+install -m 0644 %{SOURCE2} %{buildroot}/etc/xdg/autostart/
 
 %files
 /usr/bin/qubes-generate-color-palette
 %config(noreplace) /etc/xdg/autostart/qubes-generate-color-palette.desktop
 
 %changelog
+@CHANGELOG@
